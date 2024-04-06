@@ -1,0 +1,15 @@
+---
+- name: Update and upgrade VMs packages
+  hosts: vm
+  become: yes
+  remote_user: ubuntu
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: yes
+        autoremove: yes
+        autoclean: yes

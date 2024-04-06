@@ -14,6 +14,10 @@ cat ~/.ssh/id_rsa.pub >> "$current_dir/1.tmp"
 for ((i = 1; i <= count; i++));
 do
     instance="vm0$i"
+    if multipass list | grep -q $instance; then
+      continue
+    fi
+
     echo "Launch VM instance $instance."
     multipass launch jammy --name $instance -c 4 -m 4G -d 10G --network name=localbr,mode=manual
 
@@ -35,8 +39,8 @@ EOF"
     multipass transfer ./1.tmp $instance:/tmp/id_rsa.pub
     multipass exec $instance -- bash -c 'mkdir -p ~/.ssh && cat /tmp/id_rsa.pub >> ~/.ssh/authorized_keys && rm /tmp/id_rsa.pub'
 
-    rm "$current_dir/1.tmp"
     echo "10.13.31.$sub_index" >> "$current_dir/inventory"
-
     echo "Launch VM instance $instance successfully."
 done
+
+rm "$current_dir/1.tmp"
