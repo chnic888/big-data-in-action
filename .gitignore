@@ -3,3 +3,7 @@
 
 ### Ansible ###
 sbin/inventory
+
+### Ambari ###
+apache-ambari-2.7.8-src
+apache-ambari-2.7.8-src.tar.gz
