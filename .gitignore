@@ -2,6 +2,7 @@
 .idea
 
 ### Multipass ###
+multipass/inventory
 
 ### Ambari ###
 apache-ambari-2.7.8-src
