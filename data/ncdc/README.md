@@ -12,6 +12,8 @@ NCDC's archive of global historical weather and climate data, along with station
 
 ## Install Dependency
 
+Install python 3.10 and create a virtual env to install the dependencies.
+
 ```shell
 sudo apt install python3.10
 
@@ -28,10 +30,20 @@ pip install -r requirements.txt
 
 ## Download Data
 
+- Download ghcnd and readme related data.
+
 ```shell
+python3 other_download.py
+```
 
+- Download the data partitioned by year
 
+```shell
 python3 by_year_download.py
+```
 
+- Download the data partitioned by station
+
+```shell
 python3 by_station_download.py
 ```
