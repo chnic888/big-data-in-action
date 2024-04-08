@@ -1,8 +1,7 @@
 ### PyCharm ###
 .idea
 
-### Ansible ###
-sbin/inventory
+### Multipass ###
 
 ### Ambari ###
 apache-ambari-2.7.8-src
