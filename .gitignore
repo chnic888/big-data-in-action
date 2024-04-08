@@ -7,3 +7,10 @@ multipass/inventory
 ### Ambari ###
 apache-ambari-2.7.8-src
 apache-ambari-2.7.8-src.tar.gz
+
+### Data ###
+data/**/venv
+data/ncdc/by_year
+data/ncdc/by_station
+data/ncdc/ghcnd-*.txt
+data/ncdc/readme*.txt

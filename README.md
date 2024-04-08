@@ -1,4 +1,4 @@
-# Big Data Platform
+# Big Data in Action
 
 ## Getting Started
 
