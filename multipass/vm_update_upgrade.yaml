@@ -4,6 +4,13 @@
   become: yes
   remote_user: ubuntu
   tasks:
+    - name: Replace sources.list
+      copy:
+        src: ./sources.list
+        dest: /etc/apt/sources.list
+        owner: root
+        group: root
+        mode: '0644'
     - name: Update apt package cache
       apt:
         update_cache: yes
@@ -12,11 +19,11 @@
         upgrade: yes
         autoremove: yes
         autoclean: yes
-    - name: Install OpenJDK 8 headless
+    - name: Install OpenJDK 11 headless
       apt:
-        name: openjdk-8-jdk-headless
+        name: openjdk-11-jdk-headless
         state: present
-    - name: Install Python2
-      apt:
-        name: python2
-        state: present
+    # - name: Install Python2
+    #   apt:
+    #     name: python2
+    #     state: present

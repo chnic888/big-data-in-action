@@ -6,21 +6,15 @@ Setup a local test cluster via Multipass
 
 ### Prerequisites
 
-- Ubuntu 22.04(amd64)
-- Ansible 2.10
+- Ubuntu 22.04
+- Ansible 2.10+
 
 ## Install multipass
 
-Install multipass and its backend implementation lxd. Initialize lxd and set the multipass local driver to it.
+Install multipass and its backend implementation lxd. Initialize lxd and set the Multipass local driver to it.
 
 ```shell
 sudo snap install multipass
-
-snap install lxd
-
-lxd init
-
-multipass set local.driver=lxd
 ```
 
 ## Create Cluster
@@ -42,5 +36,5 @@ Please ensure that all VMs within the cluster can be accessed via SSH from the h
 playbook to upgrade the VMs。
 
 ```shell
-ansible-playbook -i inventory vm_update_upgrade.yaml
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory vm_update_upgrade.yaml
 ```                                                                      
