@@ -86,7 +86,9 @@ function launch_cluster() {
         fi
 
         echo "Launch VM instance ${instance}..."
-        multipass launch jammy --name $instance -c 1 -m 2G -d 8G
+        multipass launch jammy --name $instance -c 2 -m 4G -d 8G
+
+        echo "mount ./hadoop/${HADOOP_VERSION} to ${instance}:/home/ubuntu/hadoop"
         multipass mount "./hadoop/${HADOOP_VERSION}" $instance:/home/ubuntu/hadoop
 
         echo "Copy id_rsa.pub to ${instance}..."
@@ -95,7 +97,7 @@ function launch_cluster() {
 
         ip=$(multipass exec $instance -- bash -c "hostname -I | cut -d ' ' -f 1")
         echo "Write IP ${ip} to inventory file..."
-        echo "${ip}" >> "./ansible/inventory"
+        echo "${instance} ansible_host=${ip}" >> "./ansible/inventory"
 
         if [[ $has_master == 0 ]]; then
           echo "${ip} master" > "./ansible/hosts"
@@ -114,9 +116,21 @@ function install_dependency() {
     ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./ansible/inventory ./ansible/vm_installation.yaml --extra-vars "{'replace_source': $replace_source}"
 }
 
+function restart_vm() {
+    grep '^vm[0-9]\{2\}' < ./ansible/inventory | while IFS= read -r line
+    do
+        vm_name=$(echo "$line" | awk '{print $1}')
+        echo "Restart vm $vm_name"
+        multipass restart "$vm_name"
+        sleep 1
+    done
+}
+
+multipas
 clean_up
 pre_check
 generate_source_list
 download_hadoop
 launch_cluster
 install_dependency
+restart_vm
