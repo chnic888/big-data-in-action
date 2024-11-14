@@ -11,30 +11,31 @@ Setup a local test cluster via Multipass
 
 ## Install multipass
 
-Install multipass and its backend implementation lxd. Initialize lxd and set the Multipass local driver to it.
+Linux
 
 ```shell
 sudo snap install multipass
 ```
 
+MacOS
+
+```shell
+brew install --cask multipass
+```
+
 ## Create Cluster
 
-Generate a default RSA key pair for passwordless SSH login to the generated VMs and create a local bridge
-named `localbr` to configure virtual static IPs. Then execute the `create_cluster.sh` script to create the VM cluster.
+Generate a default RSA key pair for passwordless SSH login to the generated VMs.
 
 ```shell
 ssh-keygen -t rsa -b 4096 -N "" -f id_rsa
-
-sudo nmcli connection add type bridge con-name localbr ifname localbr ipv4.method manual ipv4.addresses 10.13.31.1/24
- 
-bash create_cluster.sh <instance number>
 ```
 
-## Update Cluster
+Then execute the `create_cluster.sh` script to create the VM cluster.
 
-Please ensure that all VMs within the cluster can be accessed via SSH from the host machine and then execute the ansible
-playbook to upgrade the VMs。
+`instance_number` indicates the number of nodes to create within the cluster  
+`is_replace_source` indicates whether the default sources.list needs to be replaced by the third-part mirror source
 
 ```shell
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory vm_update_upgrade.yaml
-```                                                                      
+bash create_cluster.sh <instance_number> <is_replace_source>
+```

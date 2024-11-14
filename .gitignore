@@ -2,7 +2,9 @@
 .idea
 
 ### Multipass ###
-multipass/inventory
+multipass/ansible/inventory
+multipass/ansible/sources.list
+multipass/hadoop/*.tar.gz
 
 ### Ambari ###
 apache-ambari-2.7.8-src
