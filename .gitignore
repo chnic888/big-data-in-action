@@ -4,6 +4,7 @@
 ### Multipass ###
 multipass/ansible/inventory
 multipass/ansible/sources.list
+multipass/ansible/hosts
 multipass/hadoop/*.tar.gz
 multipass/hadoop/hadoop-3.4.0
 

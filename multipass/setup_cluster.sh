@@ -9,10 +9,12 @@ fi
 
 node_count=$1
 replace_source=$2
+has_master=0
 
 function clean_up() {
     rm -f "./ansible/inventory"
     rm -f "./ansible/sources.list"
+    rm -f "./ansible/hosts"
 }
 
 function pre_check {
@@ -69,6 +71,7 @@ function download_hadoop() {
 function launch_cluster() {
     echo "Start to launch cluster..."
     cat ~/.ssh/id_rsa.pub > "./1.tmp"
+    echo "[vm]" > "./ansible/inventory"
 
     for ((i = 1; i <= node_count; i++));
     do
@@ -92,8 +95,14 @@ function launch_cluster() {
 
         ip=$(multipass exec $instance -- bash -c "hostname -I | cut -d ' ' -f 1")
         echo "Write IP ${ip} to inventory file..."
-        echo "[vm]" > "./ansible/inventory"
         echo "${ip}" >> "./ansible/inventory"
+
+        if [[ $has_master == 0 ]]; then
+          echo "${ip} master" > "./ansible/hosts"
+          has_master=1
+        else
+          echo "${ip} slave$((i - 1))" >> "./ansible/hosts"
+        fi
 
         echo "Launch VM instance ${instance} successfully..."
     done
@@ -102,7 +111,7 @@ function launch_cluster() {
 }
 
 function install_dependency() {
-    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./ansible/inventory ./ansible/vm_update_upgrade.yaml --extra-vars "{'replace_source': $replace_source}"
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./ansible/inventory ./ansible/vm_installation.yaml --extra-vars "{'replace_source': $replace_source}"
 }
 
 clean_up

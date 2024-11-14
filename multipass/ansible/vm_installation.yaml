@@ -24,7 +24,10 @@
       apt:
         name: openjdk-11-jdk-headless
         state: present
-    # - name: Install Python2
-    #   apt:
-    #     name: python2
-    #     state: present
+    - name: Copy hosts file to nodes
+      copy:
+        src: ./hosts
+        dest: /tmp/hosts
+    - name: Append host file content to /etc/hosts
+      shell: cat /tmp/hosts >> /etc/cloud/templates/hosts.debian.tmpl
+      become: yes
