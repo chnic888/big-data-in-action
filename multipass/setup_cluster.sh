@@ -86,7 +86,7 @@ function launch_cluster() {
         fi
 
         echo "Launch VM instance ${instance}..."
-        multipass launch jammy --name $instance -c 2 -m 4G -d 8G
+        multipass launch jammy --name $instance -c 2 -m 4G -d 10G
 
         echo "mount ./hadoop/${HADOOP_VERSION} to ${instance}:/home/ubuntu/hadoop"
         multipass mount "./hadoop/${HADOOP_VERSION}" $instance:/home/ubuntu/hadoop
@@ -113,7 +113,7 @@ function launch_cluster() {
 }
 
 function install_dependency() {
-    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./ansible/inventory ./ansible/vm_installation.yaml --extra-vars "{'replace_source': $replace_source}"
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./ansible/inventory ./ansible/install_vm.yaml --extra-vars "{'replace_source': $replace_source}"
 }
 
 function restart_vm() {

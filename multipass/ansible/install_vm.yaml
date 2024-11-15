@@ -1,5 +1,5 @@
 ---
-- name: Update and upgrade VMs packages
+- name: Install VM dependencies and configurations
   hosts: vm
   become: yes
   remote_user: ubuntu
@@ -24,10 +24,10 @@
       apt:
         name: openjdk-11-jdk-headless
         state: present
-    - name: Copy hosts file to nodes
+    - name: Copy hosts file to instances
       copy:
         src: ./hosts
         dest: /tmp/hosts
-    - name: Append host file content to /etc/hosts
+    - name: Append host file content to /etc/cloud/templates/hosts.debian.tmpl
       shell: cat /tmp/hosts >> /etc/cloud/templates/hosts.debian.tmpl
       become: yes
