@@ -1,12 +1,17 @@
 ---
-- name: Install hadoop
+- name: Install hadoop environment
   hosts: vm
   become: yes
   remote_user: ubuntu
   tasks:
+    - name: Check if /opt/hadoop exists
+      stat:
+        path: /opt/hadoop
+      register: hadoop_dir
     - name: Copy contents from /home/ubuntu/hadoop to /opt/hadoop
       shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/hadoop/ /opt/hadoop/
       become: true
+      when: not hadoop_dir.stat.exists
     - name: Set JAVA_HOME based on architecture
       set_fact:
         java_home_path: "{{ '/usr/lib/jvm/java-11-openjdk-amd64' if ansible_architecture == 'x86_64' else '/usr/lib/jvm/java-11-openjdk-arm64' }}"
@@ -18,20 +23,33 @@
       loop:
         - 'export HADOOP_HOME=/opt/hadoop'
         - 'export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin'
-        - 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64'
+        - 'export JAVA_HOME={{ java_home_path }}'
+    - name: Replace JAVA_HOME export in hadoop-env.sh
+      lineinfile:
+        path: /opt/hadoop/etc/hadoop/hadoop-env.sh
+        regexp: '^#\s*export\s+JAVA_HOME='
+        line: 'export JAVA_HOME={{ java_home_path }}'
+        state: present
     - name: Copy core-site.xml to instances
       copy:
-        src: ../hadoop/core-site.xml
+        src: etc/core-site.xml
         dest: /opt/hadoop/etc/hadoop/core-site.xml
     - name: Copy hdfs-site.xml to instances
       copy:
-        src: ../hadoop/hdfs-site.xml
+        src: etc/hdfs-site.xml
         dest: /opt/hadoop/etc/hadoop/hdfs-site.xml
     - name: Copy yarn-site.xml to instances
       copy:
-        src: ../hadoop/yarn-site.xml
+        src: etc/yarn-site.xml
         dest: /opt/hadoop/etc/hadoop/yarn-site.xml
     - name: Copy mapred-site.xml to instances
       copy:
-        src: ../hadoop/mapred-site.xml
+        src: etc/mapred-site.xml
         dest: /opt/hadoop/etc/hadoop/mapred-site.xml
+#    - name: Update workers file
+#      lineinfile:
+#        path: /opt/hadoop/etc/hadoop/workers
+#        line: "{{ item }}"
+#        create: no
+#      with_items: "{{ groups['vm'] | select('match', '^vm[0-9]+$') | map('extract', hostvars, 'inventory_hostname') | list }}"
+#      delegate_to: vm01

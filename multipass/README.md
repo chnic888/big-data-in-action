@@ -31,11 +31,19 @@ Generate a default RSA key pair for passwordless SSH login to the generated VMs.
 ssh-keygen -t rsa -b 4096 -N "" -f id_rsa
 ```
 
-Then execute the `create_cluster.sh` script to create the VM cluster.
+Then execute the `build_cluster.sh` script to create the VM cluster.
 
-`instance_number` indicates the number of nodes to create within the cluster  
+`instance_number` indicates the number of nodes to create within the cluster 
 `is_replace_source` indicates whether the default sources.list needs to be replaced by the third-part mirror source
 
 ```shell
-bash create_cluster.sh <instance_number> <is_replace_source>
+cd multipass
+
+./vm/build_cluster.sh 3 true
+```
+
+## Install Hadoop Environment
+
+```shell
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hadoop/install_hadoop.yaml
 ```
