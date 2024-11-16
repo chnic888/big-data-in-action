@@ -28,6 +28,12 @@
       copy:
         src: ./hosts
         dest: /tmp/hosts
+    - name: Remove line containing "127.0.1.1 {{fqdn}} {{hostname}}"
+      lineinfile:
+        path: /etc/cloud/templates/hosts.debian.tmpl
+        regexp: '^127\.0\.1\.1\s+\{\{fqdn\}\}\s+\{\{hostname\}\}$'
+        state: absent
+      become: yes
     - name: Append host file content to /etc/cloud/templates/hosts.debian.tmpl
       shell: cat /tmp/hosts >> /etc/cloud/templates/hosts.debian.tmpl
       become: yes
