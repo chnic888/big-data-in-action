@@ -47,3 +47,9 @@ cd multipass
 ```shell
 ./hadoop/setup_hadoop.sh
 ```
+
+### Start HDFS cluster
+
+```shell
+multipass exec vm01 -- bash -c '/opt/hadoop/sbin/start-all.sh'
+```

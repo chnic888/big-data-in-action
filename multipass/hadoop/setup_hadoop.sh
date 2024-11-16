@@ -54,7 +54,12 @@ function install_hadoop() {
     ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hadoop/install_hadoop.yaml
 }
 
+function init_master() {
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hadoop/init_master.yaml
+}
+
 pre_check
 download_hadoop
 mount_hadoop
 install_hadoop
+init_master

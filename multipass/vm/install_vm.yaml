@@ -33,7 +33,63 @@
         path: /etc/cloud/templates/hosts.debian.tmpl
         regexp: '^127\.0\.1\.1\s+\{\{fqdn\}\}\s+\{\{hostname\}\}$'
         state: absent
-      become: yes
     - name: Append host file content to /etc/cloud/templates/hosts.debian.tmpl
       shell: cat /tmp/hosts >> /etc/cloud/templates/hosts.debian.tmpl
-      become: yes
+    - name: Check if /home/ubuntu/.ssh/id_rsa exists
+      stat:
+        path: /home/ubuntu/.ssh/id_rsa
+      register: rsa_file
+      become: false
+    - name: Generate SSH key pair
+      command: ssh-keygen -t rsa -b 4096 -f /home/ubuntu/.ssh/id_rsa -N ""
+      when: not rsa_file.stat.exists
+      become: false
+    - name: Read id_rsa.pub
+      slurp:
+        src: /home/ubuntu/.ssh/id_rsa.pub
+      register: id_rsa
+      become: false
+    - name: Write content to local file
+      copy:
+        content: "{{ id_rsa['content'] | b64decode }}"
+        dest: ./rsa.pub.{{ inventory_hostname }}
+      delegate_to: localhost
+      become: false
+
+- name: Merge individual RSA files into a single file
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Merge RSA files
+      shell: cat ./rsa.pub.vm* >> ./rsa.pub.tmp
+      args:
+        executable: /bin/bash
+    - name: Remove vm rsa file
+      shell: rm ./rsa.pub.vm*
+      args:
+        executable: /bin/bash
+
+- name: Copy RSA keys to VMs
+  hosts: vm
+  remote_user: ubuntu
+  tasks:
+    - name: Read vm authorized_keys file
+      slurp:
+        src: /home/ubuntu/.ssh/authorized_keys
+      register: current_authorized_keys
+    - name: Append each line of local file to remote file
+      lineinfile:
+        path: /home/ubuntu/.ssh/authorized_keys
+        line: "{{ item }}"
+        state: present
+      with_items: "{{ lookup('file', './rsa.pub.tmp') | trim }}"
+      when: item not in current_authorized_keys['content'] | b64decode
+      no_log: true
+- name: Delete rsa.pub.tmp from localhost
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Remove vm rsa file
+      shell: rm -f ./rsa.pub.tmp
+      args:
+        executable: /bin/bash

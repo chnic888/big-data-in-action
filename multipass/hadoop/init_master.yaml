@@ -3,29 +3,12 @@
   hosts: vm01
   remote_user: ubuntu
   tasks:
-    - name: Remove "localhost" from workers
-      lineinfile:
-        path: /opt/hadoop/etc/hadoop/workers
-        state: absent
-        regexp: '^localhost$'
     - name: Add slave nodes to workers
       lineinfile:
         path: /opt/hadoop/etc/hadoop/workers
         line: "{{ item }}"
         create: no
       with_items: "{{ groups['vm'] | select('match', '^vm[0-9]+$') | map('extract', hostvars, 'inventory_hostname') | reject('equalto', 'vm01') | list }}"
-    - name: Read id_rsa.pub
-      slurp:
-        src: /home/ubuntu/.ssh/id_rsa.pub
-      register: id_rsa
-    - name: Write id_rsa of vm01 to cluster
-      lineinfile:
-        path: /home/ubuntu/.ssh/authorized_keys
-        line: "{{ id_rsa.content | b64decode | trim }}"
-        state: present
-      delegate_to: "{{ item }}"
-      run_once: no
-      with_items: "{{ groups['vm'] }}"
     - name: Check if name node format
       stat:
         path: /opt/hadoop/hdfs/namenode/current
