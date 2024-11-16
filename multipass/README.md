@@ -45,5 +45,5 @@ cd multipass
 ## Install Hadoop Environment
 
 ```shell
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hadoop/install_hadoop.yaml
+./hadoop/setup_hadoop.sh
 ```

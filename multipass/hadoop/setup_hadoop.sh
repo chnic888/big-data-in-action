@@ -52,7 +52,6 @@ function mount_hadoop() {
 
 function install_hadoop() {
     ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hadoop/install_hadoop.yaml
-    sleep 5
 }
 
 pre_check

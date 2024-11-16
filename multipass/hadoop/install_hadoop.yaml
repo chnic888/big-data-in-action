@@ -1,7 +1,6 @@
 ---
 - name: Install hadoop environment
   hosts: vm
-  become: yes
   remote_user: ubuntu
   tasks:
     - name: Check if /opt/hadoop exists
@@ -46,10 +45,10 @@
       copy:
         src: etc/mapred-site.xml
         dest: /opt/hadoop/etc/hadoop/mapred-site.xml
-#    - name: Update workers file
-#      lineinfile:
-#        path: /opt/hadoop/etc/hadoop/workers
-#        line: "{{ item }}"
-#        create: no
-#      with_items: "{{ groups['vm'] | select('match', '^vm[0-9]+$') | map('extract', hostvars, 'inventory_hostname') | list }}"
-#      delegate_to: vm01
+    - name: Check if /home/ubuntu/.ssh/id_rsa exists
+      stat:
+        path: /home/ubuntu/.ssh/id_rsa
+      register: rsa_file
+    - name: Generate SSH key pair
+      command: ssh-keygen -t rsa -b 4096 -f /home/ubuntu/.ssh/id_rsa -N ""
+      when: not rsa_file.stat.exists
