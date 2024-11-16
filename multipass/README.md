@@ -1,4 +1,7 @@
-# Cluster Setup via Multipass
+# Setup Big Data Integration Environment
+
+This project leverages `Multipass` to quickly set up an integrated big data learning environment, including Hadoop,
+Hive, and Spark.
 
 ## Getting Started
 
@@ -6,35 +9,22 @@ Setup a local test cluster via Multipass
 
 ### Prerequisites
 
-- Ubuntu 22.04
-- Ansible 2.10+
+- Operating System: MacOS / Linux
+- Dependencies：
+    - Multipass
+    - Ansible >= 2.10
 
-## Install multipass
+## Installation
 
-Linux
+### Build Multiplass Cluster
 
-```shell
-sudo snap install multipass
-```
-
-MacOS
-
-```shell
-brew install --cask multipass
-```
-
-## Create Cluster
-
-Generate a default RSA key pair for passwordless SSH login to the generated VMs.
+1. Generate a default RSA key pair for passwordless SSH login to the generated VMs.
 
 ```shell
 ssh-keygen -t rsa -b 4096 -N "" -f id_rsa
 ```
 
-Then execute the `build_cluster.sh` script to create the VM cluster.
-
-`instance_number` indicates the number of nodes to create within the cluster 
-`is_replace_source` indicates whether the default sources.list needs to be replaced by the third-part mirror source
+2. Run `build_cluster.sh` script to build cluster.
 
 ```shell
 cd multipass
@@ -42,14 +32,26 @@ cd multipass
 ./vm/build_cluster.sh 3 true
 ```
 
-## Install Hadoop Environment
+- `instance_number` indicates the number of nodes to create within the cluster
+- `is_replace_source` indicates whether the default sources.list needs to be replaced by the third-part mirror source
+
+### Install Hadoop Environment
+
+1. Run `setup_hadoop.sh` script to setup hadoop enviroment
 
 ```shell
 ./hadoop/setup_hadoop.sh
 ```
 
-### Start HDFS cluster
+2. Start hadoop cluster
 
 ```shell
 multipass exec vm01 -- bash -c '/opt/hadoop/sbin/start-all.sh'
 ```
+
+- `vm01` the cluster uses vm01 as the master by default
+
+3. Verify environment
+
+- http://10.242.171.21:9870  
+- http://10.242.171.21:8088  

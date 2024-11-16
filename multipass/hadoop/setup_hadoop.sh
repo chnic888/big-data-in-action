@@ -29,7 +29,7 @@ function download_hadoop() {
 
     if [ ! -e "./hadoop/archive/${file_name}" ]; then
         echo "${file_name} not found, start to download file..."
-        wget -P "./hadoop" "${url}${file_name}"
+        wget -P "./hadoop/archive" "${url}${file_name}"
     else
         echo "File ${file_name} exist..."
     fi
