@@ -7,6 +7,8 @@ multipass/vm/sources.list
 multipass/vm/hosts
 multipass/hadoop/archive/*.tar.gz
 multipass/hadoop/archive/hadoop-*
+multipass/hive/archive/*.tar.gz
+multipass/hive/archive/apache-hive-*
 
 ### Ambari ###
 apache-ambari-2.7.8-src
