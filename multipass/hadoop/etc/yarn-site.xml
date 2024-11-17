@@ -13,18 +13,16 @@
   limitations under the License. See accompanying LICENSE file.
 -->
 <configuration>
-    <configuration>
-        <property>
-            <name>yarn.resourcemanager.hostname</name>
-            <value>vm01</value>
-        </property>
-        <property>
-            <name>yarn.nodemanager.aux-services</name>
-            <value>mapreduce_shuffle</value>
-        </property>
-        <property>
-            <name>yarn.nodemanager.local-dirs</name>
-            <value>/tmp/yarn/local</value>
-        </property>
-    </configuration>
+    <property>
+        <name>yarn.resourcemanager.hostname</name>
+        <value>vm01</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/tmp/yarn/local</value>
+    </property>
 </configuration>

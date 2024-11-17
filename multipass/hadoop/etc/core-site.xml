@@ -17,10 +17,8 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-    <configuration>
-        <property>
-            <name>fs.defaultFS</name>
-            <value>hdfs://vm01:9000</value>
-        </property>
-    </configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://vm01:9000</value>
+    </property>
 </configuration>

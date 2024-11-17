@@ -54,3 +54,10 @@ Verify HDFS and YARN
 
 - http://vm01:9870/dfshealth.html#tab-overview
 - http://vm01:8088/cluster/nodes  
+
+Submit m/r job to cluster
+
+```shell
+ssh ubuntu@vm01
+hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.4.0.jar pi 3 3
+```
