@@ -8,7 +8,7 @@
         path: /opt/hadoop/etc/hadoop/workers
         line: "{{ item }}"
         create: no
-      with_items: "{{ groups['vm'] | select('match', '^vm[0-9]+$') | map('extract', hostvars, 'inventory_hostname') | reject('equalto', 'vm01') | list }}"
+      with_items: "{{ groups['hadoop'] | select('match', '^vm[0-9]+$') | map('extract', hostvars, 'inventory_hostname') | reject('equalto', 'vm01') | list }}"
     - name: Check if name node format
       stat:
         path: /opt/hadoop/hdfs/namenode/current

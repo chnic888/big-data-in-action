@@ -15,7 +15,7 @@ function clean_up() {
     rm -f "./vm/hosts"
 }
 
-function pre_check {
+function pre_check() {
     echo "Check OS and Arch..."
 
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then

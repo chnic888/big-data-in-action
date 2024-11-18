@@ -43,7 +43,7 @@ Run `setup_hadoop.sh` script to setup Hadoop environment
 ./hadoop/setup_hadoop.sh
 ```
 
-Use SSH to login vm01 and run start `start-all.sh`
+Use SSH to login `vm01` and run start `start-all.sh`
 
 ```shell
 ssh ubuntu@vm01

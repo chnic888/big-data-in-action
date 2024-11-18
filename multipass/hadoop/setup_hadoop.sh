@@ -1,8 +1,27 @@
 #!/bin/bash
 
 HADOOP_VERSION="hadoop-3.4.0"
+hadoop_vm=""
 
-function pre_check {
+function generate_hadoop_host_group() {
+    if grep -q '^\[hadoop\]' ./inventory; then
+        return
+    fi
+
+    echo "Generate hadoop host group..."
+    echo "" >> ./inventory
+    echo "[hadoop]" >> ./inventory
+
+    while read -r line; do
+        echo "$line" >> ./inventory
+        hostname=$(echo "$line" | awk '{print $1}')
+        hadoop_vm="${hadoop_vm},${hostname}"
+    done < <(grep '^vm' "./inventory" | grep -v '^vm00')
+
+    hadoop_vm=${hadoop_vm#,}
+}
+
+function pre_check() {
     echo "Check OS and Arch..."
 
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -41,13 +60,11 @@ function download_hadoop() {
 }
 
 function mount_hadoop() {
-    grep '^vm[0-9]\{2\}' < ./inventory | while IFS= read -r line
-    do
-        vm_name=$(echo "$line" | awk '{print $1}')
-        echo "Mount ./hadoop/archive/${HADOOP_VERSION} to ${vm_name}:/home/ubuntu/hadoop"
-        multipass mount "./hadoop/archive/${HADOOP_VERSION}" "$vm_name":/home/ubuntu/hadoop
+    IFS=',' read -ra hadoop_vm_array <<< "$hadoop_vm"
+    for vm in "${hadoop_vm_array[@]}"; do
+        echo "Mount ./hadoop/archive/${HADOOP_VERSION} to ${vm}:/home/ubuntu/hadoop"
+        multipass mount "./hadoop/archive/${HADOOP_VERSION}" "${vm}":/home/ubuntu/hadoop
     done
-
 }
 
 function install_hadoop() {
@@ -58,6 +75,7 @@ function init_master() {
     ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hadoop/init_master.yaml
 }
 
+generate_hadoop_host_group
 pre_check
 download_hadoop
 mount_hadoop
