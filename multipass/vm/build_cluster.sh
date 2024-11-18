@@ -1,12 +1,13 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-    echo "Usage: $0 <instance number> <is replace source>"
+if [ $# -ne 3 ]; then
+    echo "Usage: $0 <instance_number> <is_replace_source> <is_setup_standalone_metastore>"
     exit 1
 fi
 
 node_count=$1
 replace_source=$2
+setup_standalone_metastore=$3
 
 function clean_up() {
     rm -f "./inventory"
@@ -46,19 +47,24 @@ function generate_source_list() {
 
 function launch_cluster() {
     echo "Start to launch cluster..."
-    cat ~/.ssh/id_rsa.pub > "./1.tmp"
-    echo "[vm]" > "./inventory"
+    cat ~/.ssh/id_rsa.pub > ./1.tmp
+    echo "[vm]" > ./inventory
+    start_index=1
 
-    for ((i = 1; i <= node_count; i++));
+    if [[ "$setup_standalone_metastore" == "true" ]]; then
+        start_index=0
+    fi
+
+    for ((i = start_index; i <= node_count; i++));
     do
         instance="vm$i"
 
         if [ ${#i} -eq 1 ]; then
-          instance="vm0$i"
+            instance="vm0$i"
         fi
 
         if multipass list | grep -q $instance; then
-          continue
+            continue
         fi
 
         echo "Launch VM instance ${instance}..."
@@ -85,10 +91,14 @@ function install_vm() {
 }
 
 function restart_vm() {
-    grep '^vm[0-9]\{2\}' < ./inventory | while IFS= read -r line
+    for ((i = start_index; i <= node_count; i++));
     do
-        vm_name=$(echo "$line" | awk '{print $1}')
-        echo "Restart vm $vm_name"
+        local vm_name="vm$i"
+        if [ ${#i} -eq 1 ]; then
+            vm_name="vm0$i"
+        fi
+
+        echo "Restart vm ${vm_name}..."
         multipass restart "$vm_name"
         sleep 1
     done
