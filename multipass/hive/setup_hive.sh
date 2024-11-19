@@ -4,6 +4,21 @@ HIVE_VERSION="hive-4.0.1"
 HIVE_STANDALONE_METASTORE="hive-standalone-metastore-3.0.0"
 HIVE_METASTORE="hive-metastore-3.0.0"
 
+function generate_metastore_host_group() {
+    if grep -q '^\[metastore\]' ./inventory; then
+        return
+    fi
+
+    echo "Generate metastore host group..."
+    echo "" >> ./inventory
+    echo "[metastore]" >> ./inventory
+
+    vm00_line=$(grep '^vm00' ./inventory | head -n 1)
+    if [[ -n "$vm00_line" ]]; then
+        echo "$vm00_line" >> ./inventory
+    fi
+}
+
 function download_hive() {
     local base_url="https://mirrors.tuna.tsinghua.edu.cn/apache/hive"
     hive_file_name="apache-${HIVE_VERSION}-bin.tar.gz"
@@ -34,4 +49,15 @@ function download_hive() {
     fi
 }
 
+function mount_standalone_metastore() {
+    echo "Mount ./hive/archive/apache-${HIVE_VERSION}-bin" vm00:/home/ubuntu/hive
+    multipass mount "./hive/archive/apache-${HIVE_VERSION}-bin" vm00:/home/ubuntu/hive
+}
+
+function install_metastore() {
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hive/install_metastore.yaml
+}
+
+generate_metastore_host_group
 download_hive
+mount_standalone_metastore

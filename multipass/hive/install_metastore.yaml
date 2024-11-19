@@ -1,0 +1,22 @@
+---
+- name: Install hive metastore
+  hosts: vm00
+  remote_user: ubuntu
+  become: yes
+  tasks:
+    - name: Install MySQL packages
+      apt:
+        name: mysql-server
+        state: present
+    - name: Start and enable MySQL service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+    - name: Ensure Python package manager (pip) is installed
+      ansible.builtin.apt:
+        name: python3-pip
+        state: present
+    - name: Install PyMySQL library
+      ansible.builtin.pip:
+        name: PyMySQL
