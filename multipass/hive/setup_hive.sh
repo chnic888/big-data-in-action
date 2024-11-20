@@ -51,7 +51,11 @@ function download_hive() {
 
 function mount_standalone_metastore() {
     echo "Mount ./hive/archive/apache-${HIVE_VERSION}-bin" vm00:/home/ubuntu/hive
-    multipass mount "./hive/archive/apache-${HIVE_VERSION}-bin" vm00:/home/ubuntu/hive
+    multipass mount "./hive/archive/apache-${HIVE_METASTORE}-bin" vm00:/home/ubuntu/hive-metastore
+}
+
+function transfer_jdbc_driver() {
+    multipass transfer "./hive/archive/mysql-connector-j-9.1.0.jar" vm00:/home/ubuntu
 }
 
 function install_metastore() {
@@ -60,4 +64,5 @@ function install_metastore() {
 
 generate_metastore_host_group
 download_hive
+transfer_jdbc_driver
 mount_standalone_metastore

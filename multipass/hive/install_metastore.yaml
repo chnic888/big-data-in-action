@@ -1,22 +1,22 @@
 ---
 - name: Install hive metastore
-  hosts: vm00
+  hosts: vm60
   remote_user: ubuntu
-  become: yes
   tasks:
-    - name: Install MySQL packages
-      apt:
-        name: mysql-server
-        state: present
-    - name: Start and enable MySQL service
-      service:
-        name: mysql
-        state: started
-        enabled: yes
-    - name: Ensure Python package manager (pip) is installed
-      ansible.builtin.apt:
-        name: python3-pip
-        state: present
-    - name: Install PyMySQL library
-      ansible.builtin.pip:
-        name: PyMySQL
+    - name: Check if /opt/hive-metastore exists
+      stat:
+        path: /opt/hive-metastore
+      register: hive_metastore_dir
+    - name: Copy contents from /home/ubuntu/hive-metastore to /opt/hive-metastore
+      shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/hive-metastore/ /opt/hive-metastore/
+      become: true
+      when: not hive_metastore_dir.stat.exists
+    - name: Move mysql-connector-j-9.1.0.jar
+      ansible.builtin.command:
+        cmd: mv /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/hive-metastore/lib/
+      args:
+        removes: /home/ubuntu/mysql-connector-j-9.1.0.jar
+    - name: Copy metastore-site.xml to instances
+      copy:
+        src: etc/metastore-site.xml
+        dest: /opt/hive-metastore/conf/metastore-site.xml

@@ -19,8 +19,28 @@
 likely need to add a number of new values. -->
 <configuration>
   <property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:mysql://localhost:3306/metastore_db?createDatabaseIfNotExist=true</value>
+    <description>JDBC connect URL for the metastore database</description>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>com.mysql.cj.jdbc.Driver</value>
+    <description>Driver class name for a JDBC metastore</description>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>hive</value>
+    <description>Username to use against metastore database</description>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>hive</value>
+    <description>Password to use against metastore database</description>
+  </property>
+  <property>
     <name>metastore.thrift.uris</name>
-    <value>thrift://localhost:9083</value>
+    <value>thrift://0.0.0.0:9083</value>
     <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
   </property>
   <property>
