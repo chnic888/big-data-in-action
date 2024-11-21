@@ -60,6 +60,14 @@ function download_hadoop() {
 }
 
 function mount_hadoop() {
+    if [ -z "$hadoop_vm" ]; then
+        return
+    fi
+
+    if grep -q '^vm00' ./inventory; then
+        hadoop_vm="vm00,$hadoop_vm"
+    fi
+
     IFS=',' read -ra hadoop_vm_array <<< "$hadoop_vm"
     for vm in "${hadoop_vm_array[@]}"; do
         echo "Mount ./hadoop/archive/${HADOOP_VERSION} to ${vm}:/home/ubuntu/hadoop"
@@ -68,7 +76,12 @@ function mount_hadoop() {
 }
 
 function install_hadoop() {
-    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hadoop/install_hadoop.yaml
+    local target_host="hadoop"
+    if grep -q '^vm00' ./inventory; then
+        target_host="vm"
+    fi
+
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hadoop/install_hadoop.yaml --extra-vars "{'target_host': $target_host}"
 }
 
 function init_master() {

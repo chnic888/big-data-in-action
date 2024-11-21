@@ -1,6 +1,6 @@
 ---
 - name: Install hadoop environment
-  hosts: hadoop
+  hosts: "{{ target_host }}"
   remote_user: ubuntu
   tasks:
     - name: Check if /opt/hadoop exists
