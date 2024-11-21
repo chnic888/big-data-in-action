@@ -49,3 +49,8 @@
       environment:
         HADOOP_HOME: /opt/hadoop
         PATH: "/opt/hadoop/bin:{{ ansible_env.PATH }}"
+    - name: Create log directory
+      ansible.builtin.file:
+        path: /opt/hive-metastore/logs
+        state: directory
+        mode: '0755'

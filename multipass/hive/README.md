@@ -54,8 +54,16 @@ FLUSH PRIVILEGES;
 
 ### Install Metastore Server
 
+Run `setup_hive.sh` to setup hive metastore standalone environment
+
 ```shell
 ./hive/setup_hive.sh
+```
+
+Start metastore service
+
+```shell
+nohup /opt/hive-metastore/bin/start-metastore > /opt/hive-metastore/logs/metastore.out 2>&1 &
 ```
 
 ## Setup Hive on Hadoop Cluster
