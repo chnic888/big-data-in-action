@@ -15,9 +15,7 @@ Enter the shell of the `vm01` instance and then execute `start-all.sh` to start 
 ```shell
 ssh ubuntu@vm01
 
-cd /opt/hadoop/sbin
-
-./start-all.sh
+/opt/hadoop/sbin/start-all.sh
 ```
 
 ## Verify HDFS and YARN Services

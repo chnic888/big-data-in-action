@@ -66,3 +66,4 @@ generate_metastore_host_group
 download_hive
 transfer_jdbc_driver
 mount_standalone_metastore
+install_metastore

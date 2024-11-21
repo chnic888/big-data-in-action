@@ -1,8 +1,23 @@
 ---
 - name: Install hive metastore
-  hosts: vm60
+  hosts: metastore
   remote_user: ubuntu
   tasks:
+    - name: Ensure Python3 is installed
+      ansible.builtin.package:
+        name: python3
+        state: present
+      become: true
+    - name: Ensure pip is installed
+      ansible.builtin.package:
+        name: python3-pip
+        state: present
+      become: true
+    - name: Install PyMySQL
+      ansible.builtin.pip:
+        name: PyMySQL
+        state: present
+      become: true
     - name: Check if /opt/hive-metastore exists
       stat:
         path: /opt/hive-metastore
@@ -20,3 +35,17 @@
       copy:
         src: etc/metastore-site.xml
         dest: /opt/hive-metastore/conf/metastore-site.xml
+    - name: Check if Hive Metastore is initialized
+      mysql_query:
+        login_user: "hive"
+        login_password: "hive"
+        login_host: "localhost"
+        query: "SHOW TABLES LIKE 'TBLS';"
+        login_db: "metastore_db"
+      register: check_metastore
+    - name: Initialize Hive Metastore
+      command: "/opt/hive-metastore/bin/schematool -dbType mysql -initSchema"
+      when: check_metastore.rowcount == 0
+      environment:
+        HADOOP_HOME: /opt/hadoop
+        PATH: "/opt/hadoop/bin:{{ ansible_env.PATH }}"

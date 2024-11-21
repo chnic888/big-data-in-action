@@ -55,7 +55,7 @@ FLUSH PRIVILEGES;
 ### Install Metastore Server
 
 ```shell
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hive/install_metastore.yaml
+./hive/setup_hive.sh
 ```
 
 ## Setup Hive on Hadoop Cluster
