@@ -57,7 +57,7 @@ FLUSH PRIVILEGES;
 Run `setup_hive.sh` to setup hive metastore standalone environment
 
 ```shell
-./hive/setup_hive.sh
+./hive/setup_hive_metastore.sh
 ```
 
 Start metastore service
