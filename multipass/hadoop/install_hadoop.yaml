@@ -3,9 +3,9 @@
   hosts: "{{ target_host }}"
   remote_user: ubuntu
   tasks:
-    - name: Check if /opt/hadoop exists
+    - name: Check if /opt/hadoop/README.txt exists
       stat:
-        path: /opt/hadoop
+        path: /opt/hadoop/README.txt
       register: hadoop_dir
     - name: Copy contents from /home/ubuntu/hadoop to /opt/hadoop
       shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/hadoop/ /opt/hadoop/
