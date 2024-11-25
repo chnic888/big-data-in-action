@@ -1,0 +1,34 @@
+---
+- name: Install hive metastore
+  hosts: hadoop
+  remote_user: ubuntu
+  tasks:
+    - name: Check if /opt/hive exists
+      stat:
+        path: /opt/hive
+      register: hive_dir
+    - name: Copy contents from /home/ubuntu/hive to /opt/hive
+      shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/hive/ /opt/hive/
+      become: true
+      when: not hive_dir.stat.exists
+    - name: Append environment variables to .bashrc
+      lineinfile:
+        path: /home/ubuntu/.bashrc
+        line: "{{ item }}"
+        state: present
+      loop:
+        - 'export HIVE_HOME=/opt/hive'
+        - 'export PATH=$PATH:$HIVE_HOME/bin'
+    - name: Move mysql-connector-j-9.1.0.jar
+      ansible.builtin.command:
+        cmd: mv /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/hive/lib/
+      args:
+        removes: /home/ubuntu/mysql-connector-j-9.1.0.jar
+    - name: Copy hive-site.xml to instances
+      copy:
+        src: etc/hive-site.xml
+        dest: /opt/hive/conf/hive-site.xml
+    - name: Copy hive-env.sh to instances
+      copy:
+        src: etc/hive-env.sh
+        dest: /opt/hive/conf/hive-env.sh

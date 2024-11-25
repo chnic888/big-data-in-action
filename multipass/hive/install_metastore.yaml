@@ -26,15 +26,37 @@
       shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/hive-metastore/ /opt/hive-metastore/
       become: true
       when: not hive_metastore_dir.stat.exists
-    - name: Move mysql-connector-j-9.1.0.jar
+    - name: Check if /opt/hive exists
+      stat:
+        path: /opt/hive
+      register: hive_dir
+    - name: Copy contents from /home/ubuntu/hive to /opt/hive
+      shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/hive/ /opt/hive/
+      become: true
+      when: not hive_dir.stat.exists
+    - name: Move mysql-connector-j-9.1.0.jar to metastore
       ansible.builtin.command:
-        cmd: mv /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/hive-metastore/lib/
-      args:
-        removes: /home/ubuntu/mysql-connector-j-9.1.0.jar
+        cmd: cp /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/hive-metastore/lib/
+    - name: Move mysql-connector-j-9.1.0.jar to hive
+      ansible.builtin.command:
+        cmd: cp /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/hive/lib/
     - name: Copy metastore-site.xml to instances
       copy:
         src: etc/metastore-site.xml
         dest: /opt/hive-metastore/conf/metastore-site.xml
+    - name: Copy hive-site.xml to instances
+      copy:
+        src: etc/hive-site.xml
+        dest: /opt/hive/conf/hive-site.xml
+    - name: Copy hive-env.sh to instances
+      copy:
+        src: etc/hive-env.sh
+        dest: /opt/hive/conf/hive-env.sh
+    - name: Create log directory
+      ansible.builtin.file:
+        path: /opt/hive-metastore/logs
+        state: directory
+        mode: '0755'
     - name: Check if Hive Metastore is initialized
       mysql_query:
         login_user: "hive"
@@ -44,13 +66,8 @@
         login_db: "metastore_db"
       register: check_metastore
     - name: Initialize Hive Metastore
-      command: "/opt/hive-metastore/bin/schematool -dbType mysql -initSchema"
-      when: check_metastore.rowcount == 0
+      command: "/opt/hive/bin/schematool -dbType mysql -initSchema"
+      when: check_metastore.rowcount[0] == 0
       environment:
         HADOOP_HOME: /opt/hadoop
         PATH: "/opt/hadoop/bin:{{ ansible_env.PATH }}"
-    - name: Create log directory
-      ansible.builtin.file:
-        path: /opt/hive-metastore/logs
-        state: directory
-        mode: '0755'
