@@ -80,4 +80,3 @@
 # - SPARK_BEELINE_OPTS, to set config properties only for the beeline cli (e.g. "-Dx=y")
 # - SPARK_BEELINE_MEMORY, Memory for beeline (e.g. 1000M, 2G) (Default: 1G)
 
-HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop

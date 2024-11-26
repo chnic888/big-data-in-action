@@ -27,11 +27,33 @@
       copy:
         src: etc/spark-env.sh
         dest: /opt/spark/conf/spark-env.sh
+    - name: Copy workers to instances
+      copy:
+        src: etc/workers
+        dest: /opt/spark/conf/workers
     - name: Set JAVA_HOME based on architecture
       set_fact:
         java_home_path: "{{ '/usr/lib/jvm/java-11-openjdk-amd64' if ansible_architecture == 'x86_64' else '/usr/lib/jvm/java-11-openjdk-arm64' }}"
     - name: Add JAVA_HOME into spark-env.sh
       lineinfile:
         path: /opt/spark/conf/spark-env.sh
-        line: 'JAVA_HOME={{ java_home_path }}'
+        line: "{{ item }}"
         state: present
+      loop:
+        - 'export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop'
+        - 'export JAVA_HOME={{ java_home_path }}'
+        - 'export SPARK_MASTER_HOST=vm01'
+        - 'export SPARK_MASTER_PORT=7077'
+    - name: Add work nodes to workers
+      lineinfile:
+        path: /opt/spark/conf/workers
+        line: "{{ item }}"
+        create: no
+      with_items: "{{ groups['hadoop'] | select('match', '^vm[0-9]+$') | map('extract', hostvars, 'inventory_hostname') | list }}"
+    - name: Copy mysql-connector-j-9.1.0.jar to spark
+      ansible.builtin.command:
+        cmd: cp /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/spark/jars/
+    - name: Copy hive-site.xml to instances
+      copy:
+        src: ../hive/etc/hive-site.xml
+        dest: /opt/spark/conf/hive-site.xml

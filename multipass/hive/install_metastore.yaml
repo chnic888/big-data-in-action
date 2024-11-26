@@ -26,7 +26,7 @@
       shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/hive/ /opt/hive/
       become: true
       when: not hive_dir.stat.exists
-    - name: Move mysql-connector-j-9.1.0.jar to hive
+    - name: Copy mysql-connector-j-9.1.0.jar to hive
       ansible.builtin.command:
         cmd: cp /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/hive/lib/
     - name: Copy hive-site.xml to instances

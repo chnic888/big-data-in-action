@@ -18,7 +18,7 @@ ssh ubuntu@vm01
 
 ## Validate Hadoop Cluster
 
-Verify HDFS and YARN services
+Verify HDFS and YARN services via website
 
 - Access http://vm01:9870/dfshealth.html#tab-overview to check tha availability of HDFS
 - Access http://vm01:8088/cluster/nodes to check tha availability of YARN

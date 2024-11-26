@@ -19,11 +19,9 @@
       loop:
         - 'export HIVE_HOME=/opt/hive'
         - 'export PATH=$PATH:$HIVE_HOME/bin'
-    - name: Move mysql-connector-j-9.1.0.jar
+    - name: Copy mysql-connector-j-9.1.0.jar to hive
       ansible.builtin.command:
-        cmd: mv /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/hive/lib/
-      args:
-        removes: /home/ubuntu/mysql-connector-j-9.1.0.jar
+        cmd: cp /home/ubuntu/mysql-connector-j-9.1.0.jar /opt/hive/lib/
     - name: Copy hive-site.xml to instances
       copy:
         src: etc/hive-site.xml

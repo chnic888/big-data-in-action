@@ -34,7 +34,7 @@ nohup /opt/hive/bin/hiveserver2 > /opt/hive/logs/hiveserver2.log 2>&1 &
 
 ## Validate Hive
 
-Verify HiveServer2 service
+Verify HiveServer2 service via website
 
 - Access http://vm01:10002/ to check tha availability of HiveServer2
 
@@ -47,6 +47,7 @@ ssh ubuntu@vm01
 ```
 
 Create test data to verify Hive on Hadoop cluster
+
 ```sql
 CREATE TABLE test_table (id INT, name STRING);
 INSERT INTO test_table VALUES (1, 'Alice'), (2, 'Bob');
