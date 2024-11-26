@@ -5,7 +5,7 @@
 Run `setup_spark.sh` script to setup spark in standalone deploy mode
 
 ```shell
-./hive/setup_spark.sh
+./spark/setup_spark.sh
 ```
 
 Enter the shell of the `vm00` instance and start spark service

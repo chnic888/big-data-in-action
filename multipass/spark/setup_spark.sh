@@ -1,9 +1,9 @@
 #!/bin/bash
 
-SPARK_VERSION=3.5.3
+SPARK_VERSION="3.5.3"
 
 function download_spark() {
-    local spark_base_url="https://mirrors.tuna.tsinghua.edu.cn/apache/spark/spark-$SPARK_VERSION"
+    local spark_base_url="https://archive.apache.org/dist/spark/spark-$SPARK_VERSION"
     spark_file_name="spark-$SPARK_VERSION-bin-hadoop3.tgz"
 
     if [ ! -e "./spark/archive/${spark_file_name}" ]; then
