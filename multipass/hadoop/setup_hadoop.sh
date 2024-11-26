@@ -35,7 +35,7 @@ function pre_check() {
 }
 
 function download_hadoop() {
-    local url="https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-$HADOOP_VERSION/"
+    local hadoop_base_url="https://dlcdn.apache.org/hadoop/common/hadoop-$HADOOP_VERSION"
     file_name="hadoop-$HADOOP_VERSION.tar.gz"
 
     if [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]]; then
@@ -44,7 +44,7 @@ function download_hadoop() {
 
     if [ ! -e "./hadoop/archive/$file_name" ]; then
         echo "$file_name not found, start to download file..."
-        wget -P "./hadoop/archive" "${url}${file_name}"
+        wget -P "./hadoop/archive" "${hadoop_base_url}/${file_name}"
     else
         echo "File $file_name exist..."
     fi

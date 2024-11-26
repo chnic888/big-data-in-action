@@ -13,7 +13,7 @@
       when: not hadoop_dir.stat.exists
     - name: Set JAVA_HOME based on architecture
       set_fact:
-        java_home_path: "{{ '/usr/lib/jvm/java-11-openjdk-amd64' if ansible_architecture == 'x86_64' else '/usr/lib/jvm/java-11-openjdk-arm64' }}"
+        java_home_path: "{{ '/usr/lib/jvm/java-8-openjdk-amd64' if ansible_architecture == 'x86_64' else '/usr/lib/jvm/java-8-openjdk-arm64' }}"
     - name: Append environment variables to .bashrc
       lineinfile:
         path: /home/ubuntu/.bashrc

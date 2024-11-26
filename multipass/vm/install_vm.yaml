@@ -20,9 +20,9 @@
         upgrade: yes
         autoremove: yes
         autoclean: yes
-    - name: Install OpenJDK 11 headless
+    - name: Install OpenJDK 8
       apt:
-        name: openjdk-11-jdk-headless
+        name: openjdk-8-jdk
         state: present
     - name: Copy hosts file to instances
       copy:
