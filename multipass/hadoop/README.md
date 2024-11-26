@@ -23,7 +23,7 @@ Verify HDFS and YARN services via website
 - Access http://vm01:9870/dfshealth.html#tab-overview to check tha availability of HDFS
 - Access http://vm01:8088/cluster/nodes to check tha availability of YARN
 
-Submit m/r Job to cluster, the m/r job cloud be submitted on both cluster and local machine
+Submit m/r application to cluster, the application could be submitted on both cluster and local machine
 
 ```shell
 ssh ubuntu@vm01

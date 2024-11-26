@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HIVE_VERSION="4.0.1"
+HIVE_VERSION="3.1.3"
 HIVE_DB_PASSWORD="Xy7@dFqP1zW"
 
 function generate_metastore_host_group() {
@@ -19,7 +19,7 @@ function generate_metastore_host_group() {
 }
 
 function download_hive() {
-    local hive_base_url="https://mirrors.tuna.tsinghua.edu.cn/apache/hive/hive-$HIVE_VERSION"
+    local hive_base_url="https://archive.apache.org/dist/hive/hive-$HIVE_VERSION"
     hive_file_name="apache-hive-${HIVE_VERSION}-bin.tar.gz"
 
     if [ ! -e "./hive/archive/${hive_file_name}" ]; then

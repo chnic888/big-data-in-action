@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HIVE_VERSION=4.0.1
+HIVE_VERSION="3.1.3"
 
 function mount_hive() {
     for host in $(ansible-inventory -i inventory --list | jq -r '.hadoop.hosts[]'); do
