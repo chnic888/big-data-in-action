@@ -1,0 +1,37 @@
+---
+- name: Install Apache Spark
+  hosts: hadoop
+  remote_user: ubuntu
+  tasks:
+    - name: Check if /opt/spark/README.md exists
+      stat:
+        path: /opt/spark/README.md
+      register: spark_dir
+    - name: Copy contents from /home/ubuntu/spark to /opt/spark
+      shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/spark/ /opt/spark/
+      become: true
+      when: not spark_dir.stat.exists
+    - name: Append environment variables to .bashrc
+      lineinfile:
+        path: /home/ubuntu/.bashrc
+        line: "{{ item }}"
+        state: present
+      loop:
+        - 'export SPARK_HOME=/opt/spark'
+        - 'export PATH=$PATH:$SPARK_HOME/bin'
+    - name: Copy spark-defaults.conf to instances
+      copy:
+        src: etc/spark-defaults.conf
+        dest: /opt/spark/conf/spark-defaults.conf
+    - name: Copy spark-env.sh to instances
+      copy:
+        src: etc/spark-env.sh
+        dest: /opt/spark/conf/spark-env.sh
+    - name: Set JAVA_HOME based on architecture
+      set_fact:
+        java_home_path: "{{ '/usr/lib/jvm/java-11-openjdk-amd64' if ansible_architecture == 'x86_64' else '/usr/lib/jvm/java-11-openjdk-arm64' }}"
+    - name: Add JAVA_HOME into spark-env.sh
+      lineinfile:
+        path: /opt/spark/conf/spark-env.sh
+        line: 'JAVA_HOME={{ java_home_path }}'
+        state: present

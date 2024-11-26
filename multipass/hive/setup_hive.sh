@@ -24,7 +24,6 @@ function unmount_hive() {
         echo "Unmount $host:/home/ubuntu/hive..."
         multipass unmount "$host":/home/ubuntu/hive
     done
-
 }
 
 mount_hive
