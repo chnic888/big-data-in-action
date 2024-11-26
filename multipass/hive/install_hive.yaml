@@ -3,9 +3,9 @@
   hosts: hadoop
   remote_user: ubuntu
   tasks:
-    - name: Check if /opt/hive exists
+    - name: Check if /opt/hive/RELEASE_NOTES.txt exists
       stat:
-        path: /opt/hive
+        path: /opt/hive/RELEASE_NOTES.txt
       register: hive_dir
     - name: Copy contents from /home/ubuntu/hive to /opt/hive
       shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/hive/ /opt/hive/
