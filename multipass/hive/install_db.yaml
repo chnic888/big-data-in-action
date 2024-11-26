@@ -1,0 +1,46 @@
+---
+- name: Install and Configure MySQL
+  hosts: metastore
+  remote_user: ubuntu
+  become: yes
+  tasks:
+    - name: Ensure Python3 is installed
+      ansible.builtin.package:
+        name: python3
+        state: present
+    - name: Ensure pip is installed
+      ansible.builtin.package:
+        name: python3-pip
+        state: present
+    - name: Install PyMySQL
+      ansible.builtin.pip:
+        name: PyMySQL
+        state: present
+    - name: Ensure MySQL 8.0 is installed
+      apt:
+        name: mysql-server-8.0
+        state: present
+        update_cache: yes
+    - name: Configure MySQL to allow remote connections
+      blockinfile:
+        path: /etc/mysql/my.cnf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          [mysqld]
+          bind-address = 0.0.0.0
+    - name: Restart MySQL service to apply changes
+      service:
+        name: mysql
+        state: restarted
+    - name: Run mysql_secure_installation with default options
+      command: mysql_secure_installation --use-default
+    - name: Create Hive user in MySQL
+      mysql_user:
+        name: hive
+        host: '%'
+        password: "{{ hive_password }}"
+        priv: "*.*:ALL"
+        append_privs: yes
+        column_case_sensitive: false
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock

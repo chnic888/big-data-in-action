@@ -1,5 +1,5 @@
 ---
-- name: Install hadoop environment
+- name: Install Apache Hadoop
   hosts: "{{ target_host }}"
   remote_user: ubuntu
   tasks:

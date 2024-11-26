@@ -1,5 +1,5 @@
 ---
-- name: Install hadoop environment
+- name: Setup Hadoop Master Node
   hosts: vm01
   remote_user: ubuntu
   tasks:

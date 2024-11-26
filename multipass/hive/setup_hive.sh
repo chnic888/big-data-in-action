@@ -19,6 +19,15 @@ function install_hive() {
     ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./hive/install_hive.yaml
 }
 
+function unmount_hive() {
+    for host in $(ansible-inventory -i inventory --list | jq -r '.hadoop.hosts[]'); do
+        echo "Unmount $host:/home/ubuntu/hive..."
+        multipass unmount "$host":/home/ubuntu/hive
+    done
+
+}
+
 mount_hive
 transfer_jdbc_driver
 install_hive
+unmount_hive

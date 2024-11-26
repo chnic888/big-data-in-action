@@ -1,4 +1,4 @@
-# Install Hadoop
+# Install Apache Hadoop
 
 ## Setup Hadoop Environment
 

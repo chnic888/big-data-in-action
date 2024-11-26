@@ -1,5 +1,5 @@
 ---
-- name: Install hive metastore
+- name: Install Apache Hive
   hosts: hadoop
   remote_user: ubuntu
   tasks:
@@ -32,3 +32,8 @@
       copy:
         src: etc/hive-env.sh
         dest: /opt/hive/conf/hive-env.sh
+    - name: Create log directory
+      ansible.builtin.file:
+        path: /opt/hive/logs
+        state: directory
+        mode: '0755'
