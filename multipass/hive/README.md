@@ -1,55 +1,70 @@
 # Install Apache Hive
 
-## Setup Hive Metastore Server
+This guide explains how to set up Hive Metastore Server, Hive on a Hadoop cluster, and validate the Hive environment.
 
-Run `setup_metastore.sh` script to setup Hive metastore server
+---
 
-```shell
-./hive/setup_metastore.sh
-```
+## Step 1: Setup Hive Metastore Server
 
-Enter the shell of the `vm00` instance and start metastore service
+1. Run the `setup_metastore.sh` script to configure the Hive Metastore Server:
+   ```bash
+   ./hive/setup_metastore.sh
+   ```
 
-```shell
-ssh ubuntu@vm00
+2. Log in to the **vm00** instance and start the Metastore service in the background:
+   ```bash
+   ssh ubuntu@vm00
 
-nohup /opt/hive/bin/hive --service metastore > /opt/hive/logs/metastore.log 2>&1 &
-```
+   nohup /opt/hive/bin/hive --service metastore > /opt/hive/logs/metastore.log 2>&1 &
+   ```
 
-## Setup Hive on Hadoop Cluster
+---
 
-Run `setup_hive.sh` script to setup Hive service
+## Step 2: Setup Hive on Hadoop Cluster
 
-```shell
-./hive/setup_hive.sh
-```
+1. Run the `setup_hive.sh` script to configure Hive on the Hadoop cluster:
+   ```bash
+   ./hive/setup_hive.sh
+   ```
 
-Enter the shell of the `vm01` instance and start metastore service
+2. Log in to the **vm01** instance and start the HiveServer2 service in the background:
+   ```bash
+   ssh ubuntu@vm01
 
-```shell
-ssh ubuntu@vm01
+   nohup /opt/hive/bin/hiveserver2 > /opt/hive/logs/hiveserver2.log 2>&1 &
+   ```
 
-nohup /opt/hive/bin/hiveserver2 > /opt/hive/logs/hiveserver2.log 2>&1 &
-```
+---
 
-## Validate Hive
+## Step 3: Validate Hive
 
-Verify HiveServer2 service via website
+### Verify HiveServer2 Service
 
-- Access http://vm01:10002/ to check tha availability of HiveServer2
+- **Check HiveServer2 Running Status**: [http://vm01:10002/](http://vm01:10002/)
 
-Enter the shell of the `vm01` instance and login HiveServer2 
+### Access HiveServer2
 
-```shell
-ssh ubuntu@vm01
+1. Log in to the **vm01** instance:
+   ```bash
+   ssh ubuntu@vm01
+   ```
 
-/opt/hive/bin/beeline -u jdbc:hive2://vm01:10000 -n ubuntu
-```
+2. Connect to HiveServer2 using Beeline:
+   ```bash
+   /opt/hive/bin/beeline -u jdbc:hive2://vm01:10000 -n ubuntu
+   ```
 
-Create test data to verify Hive on Hadoop cluster
+---
 
-```sql
-CREATE TABLE test_table (id INT, name STRING);
-INSERT INTO test_table VALUES (1, 'Alice'), (2, 'Bob');
-SELECT * FROM test_table;
-```
+## Step 4: Test Hive on Hadoop Cluster
+
+1. After logging into HiveServer2 via Beeline, create a test table and populate it with data:
+   ```sql
+   CREATE TABLE test_table (id INT, name STRING);
+   INSERT INTO test_table VALUES (1, 'Alice'), (2, 'Bob');
+   ```
+
+2. Confirm that the test data is successfully stored and retrieved.
+   ```sql
+   SELECT * FROM test_table;
+   ```

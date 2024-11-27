@@ -1,32 +1,49 @@
 # Install Apache Hadoop
 
-## Setup Hadoop Environment
+This guide will help you set up and validate the Apache Hadoop environment.
 
-Run `setup_hadoop.sh` script to setup Hadoop environment
+---
 
-```shell
-./hadoop/setup_hadoop.sh
-```
+## Step 1: Setup Hadoop Environment
 
-Enter the shell of the `vm01` instance and then execute `start-all.sh` to start HDFS and YARN services.
+1. Run the `setup_hadoop.sh` script to install and configure Hadoop:
+   ```bash
+   ./hadoop/setup_hadoop.sh
+   ```
 
-```shell
-ssh ubuntu@vm01
+2. Log in to the **vm01** instance and start HDFS and YARN services using the `start-all.sh` script:
+   ```bash
+   ssh ubuntu@vm01
 
-/opt/hadoop/sbin/start-all.sh
-```
+   /opt/hadoop/sbin/start-all.sh
+   ```
 
-## Validate Hadoop Cluster
+---
 
-Verify HDFS and YARN services via website
+## Step 2: Validate Hadoop Cluster
 
-- Access http://vm01:9870/dfshealth.html#tab-overview to check tha availability of HDFS
-- Access http://vm01:8088/cluster/nodes to check tha availability of YARN
+### Verify HDFS and YARN Services
 
-Submit m/r application to cluster, the application could be submitted on both cluster and local machine
+- **Check HDFS Health**:
+  [http://vm01:9870/dfshealth.html#tab-overview](http://vm01:9870/dfshealth.html#tab-overview)
 
-```shell
-ssh ubuntu@vm01
+- **Check YARN Node Status**:
+  [http://vm01:8088/cluster/nodes](http://vm01:8088/cluster/nodes)
 
-hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.4.0.jar pi 3 3
-```
+---
+
+## Step 3: Submit a MapReduce Application
+
+Submit a MapReduce example application to test the cluster functionality. The application can be submitted on either the
+cluster
+or a local machine:
+
+1. SSH into the **vm01** instance:
+   ```bash
+   ssh ubuntu@vm01
+   ```
+
+2. Run the MapReduce example job to calculate the value of Pi:
+   ```bash
+   hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.4.0.jar pi 3 3
+   ```
