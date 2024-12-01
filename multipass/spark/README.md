@@ -6,9 +6,9 @@ This guide provides steps to set up Apache Spark in standalone deploy mode and v
 
 ## Step 1: Setup Spark Environment
 
-1. Run the `setup_spark.sh` script to configure Spark in standalone mode:
+1. Run the `install_spark.sh` script to configure Spark in standalone mode:
    ```bash
-   ./spark/setup_spark.sh
+   ./spark/install_spark.sh
    ```
 
 2. Log in to the **vm01** instance and start the Spark services:

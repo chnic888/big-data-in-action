@@ -45,5 +45,5 @@ or a local machine:
 
 2. Run the MapReduce example job to calculate the value of Pi:
    ```bash
-   hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.4.0.jar pi 3 3
+   /opt/hadoop/bin/hadoop jar /opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.4.0.jar pi 3 3
    ```
