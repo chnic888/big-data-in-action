@@ -8,6 +8,7 @@ multipass/vm/hosts
 multipass/hadoop/archive/**
 multipass/hive/archive/**
 multipass/spark/archive/**
+multipass/iceberg/archive/**
 
 ### Ambari ###
 apache-ambari-2.7.8-src
