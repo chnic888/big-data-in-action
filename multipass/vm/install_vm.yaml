@@ -24,6 +24,10 @@
       apt:
         name: openjdk-8-jdk
         state: present
+    - name: Install OpenJDK 11
+      apt:
+        name: openjdk-11-jdk
+        state: present
     - name: Copy hosts file to instances
       copy:
         src: ./hosts

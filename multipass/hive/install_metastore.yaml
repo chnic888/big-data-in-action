@@ -22,6 +22,16 @@
       copy:
         src: etc/hive-env.sh
         dest: /opt/hive/conf/hive-env.sh
+    - name: Set JAVA_HOME based on architecture
+      set_fact:
+        java_home_path: "{{ '/usr/lib/jvm/java-8-openjdk-amd64' if ansible_architecture == 'x86_64' else '/usr/lib/jvm/java-8-openjdk-arm64' }}"
+    - name: Append JAVA_HOME to hive-env.sh
+      lineinfile:
+        path: /opt/hive/conf/hive-env.sh
+        line: "{{ item }}"
+        state: present
+      loop:
+        - 'export JAVA_HOME={{ java_home_path }}'
     - name: Create log directory
       ansible.builtin.file:
         path: /opt/hive/logs
