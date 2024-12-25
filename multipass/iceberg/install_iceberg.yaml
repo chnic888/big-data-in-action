@@ -1,0 +1,19 @@
+---
+- name: Copy Apache Iceberg Jar to Hive
+  hosts: vm
+  remote_user: ubuntu
+  tasks:
+    - name: Copy iceberg-hive-runtime jar to hive
+      ansible.builtin.command:
+        cmd: cp /home/ubuntu/iceberg-hive-runtime-{{ iceberg_version }}.jar /opt/hive/lib/
+
+- name: Copy Apache Iceberg Jar to Hadoop and Spark
+  hosts: hadoop
+  remote_user: ubuntu
+  tasks:
+    - name: Copy iceberg-hive-runtime jar to hadoop
+      ansible.builtin.command:
+        cmd: cp /home/ubuntu/iceberg-hive-runtime-{{ iceberg_version }}.jar /opt/hadoop/share/hadoop/common/lib/
+    - name: Copy iceberg-spark-runtime jar to spark
+      ansible.builtin.command:
+        cmd: cp /home/ubuntu/iceberg-spark-runtime-3.5_2.12-{{ iceberg_version }}.jar /opt/spark/jars/

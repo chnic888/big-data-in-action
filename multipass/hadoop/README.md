@@ -35,8 +35,7 @@ This guide will help you set up and validate the Apache Hadoop environment.
 ## Step 3: Submit a MapReduce Application
 
 Submit a MapReduce example application to test the cluster functionality. The application can be submitted on either the
-cluster
-or a local machine:
+cluster or a local machine:
 
 1. SSH into the **vm01** instance:
    ```bash
