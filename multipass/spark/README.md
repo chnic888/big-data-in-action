@@ -26,6 +26,24 @@ This guide provides steps to set up Apache Spark in standalone deploy mode and v
 
 - **Check Spark Running Status**: [http://vm01:8080/](http://vm01:8080/)
 
+### Verify Hive-Spark Integration
+
+1. Log in to the **vm01** instance:
+   ```bash
+   ssh ubuntu@vm01
+   ```
+
+2. Submit a test Spark application (e.g., calculating Pi):
+   ```shell
+   /opt/spark/bin/spark-sql
+   ```
+
+   ```sql
+   show databases;
+   show tables;
+   select * from test_table;
+   ```
+
 ### Submit a Test Application
 
 1. Log in to the **vm01** instance:
@@ -42,4 +60,5 @@ This guide provides steps to set up Apache Spark in standalone deploy mode and v
        --num-executors 10 \
        /opt/spark/examples/jars/spark-examples_2.12-3.5.3.jar 100
    ```
+   
 3. Check the Spark UI or logs to ensure the application ran successfully.
