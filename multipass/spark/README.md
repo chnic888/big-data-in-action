@@ -55,6 +55,7 @@ This guide provides steps to set up Apache Spark in standalone deploy mode and v
    ```bash
    /opt/spark/bin/spark-submit \
        --class org.apache.spark.examples.SparkPi \
+       --master spark://vm01:7077 \
        --deploy-mode client \
        --executor-memory 1G \
        --num-executors 10 \
