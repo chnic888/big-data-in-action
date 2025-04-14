@@ -61,7 +61,27 @@ This guide explains how to set up Hive Metastore Server, Hive on a Hadoop cluste
 1. After logging into HiveServer2 via Beeline, create a test table and populate it with data:
    ```sql
    CREATE TABLE test_table (id INT, name STRING);
-   INSERT INTO test_table VALUES (1, 'Alice'), (2, 'Bob');
+   INSERT INTO test_table VALUES
+      (1, 'Alice'),
+      (2, 'Bob'),
+      (3, 'Charlie'),
+      (4, 'Diana'),
+      (5, 'Ethan'),
+      (6, 'Fiona'),
+      (7, 'George'),
+      (8, 'Hannah'),
+      (9, 'Ian'),
+      (10, 'Jasmine'),
+      (11, 'Kevin'),
+      (12, 'Luna'),
+      (13, 'Mike'),
+      (14, 'Nina'),
+      (15, 'Oscar'),
+      (16, 'Paula'),
+      (17, 'Quinn'),
+      (18, 'Rachel'),
+      (19, 'Steve'),
+      (20, 'Tina');
    ```
 
 2. Confirm that the test data is successfully stored and retrieved.
