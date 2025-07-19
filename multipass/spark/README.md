@@ -56,10 +56,59 @@ This guide provides steps to set up Apache Spark in standalone deploy mode and v
    /opt/spark/bin/spark-submit \
        --class org.apache.spark.examples.SparkPi \
        --master spark://vm01:7077 \
-       --deploy-mode client \
+       --deploy-mode cluster \
        --executor-memory 1G \
        --num-executors 10 \
        /opt/spark/examples/jars/spark-examples_2.12-3.5.3.jar 100
    ```
-   
-3. Check the Spark UI or logs to ensure the application ran successfully.
+
+3. Get submission id by Spark API server
+   ```bash
+   curl -X POST http://vm01:6066/v1/submissions/create \
+     --header "Content-Type: application/json" \
+     --data '{
+       "action": "CreateSubmissionRequest",
+       "appArgs": ["1000"],
+       "appResource": "file:/opt/spark/examples/jars/spark-examples_2.12-3.5.3.jar",
+       "clientSparkVersion": "3.5.3",
+       "mainClass": "org.apache.spark.examples.SparkPi",
+       "environmentVariables": {
+         "SPARK_ENV_LOADED": "1"
+       },
+       "sparkProperties": {
+         "spark.app.name": "SparkPi-REST",
+         "spark.submit.deployMode": "cluster",
+         "spark.master": "spark://vm01:7077",
+         "spark.executor.memory": "1G",
+         "spark.executor.instances": "10",
+         "spark.jars": "file:/opt/spark/examples/jars/spark-examples_2.12-3.5.3.jar"
+       }
+     }'
+   ```
+4. Get the response
+   ```json
+   {
+     "action": "CreateSubmissionResponse",
+     "message": "Driver successfully submitted as driver-20250719223931-0002",
+     "serverSparkVersion": "3.5.3",
+     "submissionId": "driver-20250719223931-0002",
+     "success": true
+   }
+   ```
+
+5. Get the submission status by submissionId
+   ```bash
+   curl http://vm01:6066/v1/submissions/status/driver-20250719223931-0002
+   ```
+6. Get status of submission
+   ```json
+   {
+     "action": "SubmissionStatusResponse",
+     "driverState": "FINISHED",
+     "serverSparkVersion": "3.5.3",
+     "submissionId": "driver-20250719223931-0002",
+     "success": true,
+     "workerHostPort": "10.88.68.33:37487",
+     "workerId": "worker-20250719220953-10.88.68.33-37487"
+   }
+   ```
