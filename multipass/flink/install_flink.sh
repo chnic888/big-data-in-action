@@ -26,6 +26,10 @@ function mount_flink() {
     done
 }
 
+function install_flink() {
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ./flink/install_flink.yaml
+}
+
 function unmount_flink() {
     for host in $(ansible-inventory -i inventory --list | jq -r '.hadoop.hosts[]'); do
         echo "Unmount $host:/home/ubuntu/flink..."
@@ -35,4 +39,5 @@ function unmount_flink() {
 
 download_flink
 mount_flink
+install_flink
 unmount_flink

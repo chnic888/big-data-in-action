@@ -1,0 +1,39 @@
+---
+- name: Install Apache Flink
+  hosts: hadoop
+  remote_user: ubuntu
+  tasks:
+    - name: Check if /opt/flink/README.md exists
+      stat:
+        path: /opt/flink/README.md
+      register: flink_dir
+    - name: Copy contents from /home/ubuntu/flink to /opt/flink
+      shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/flink/ /opt/flink/
+      become: true
+      when: not flink_dir.stat.exists
+    - name: Append environment variables to .bashrc
+      lineinfile:
+        path: /home/ubuntu/.bashrc
+        line: "{{ item }}"
+        state: present
+      loop:
+        - 'export FLINK_HOME=/opt/flink'
+        - 'export PATH=$PATH:$FLINK_HOME/bin'
+    - name: Copy config.yaml to instances
+      copy:
+        src: etc/config.yaml
+        dest: /opt/flink/conf/config.yaml
+    - name: Copy masters to instances
+      copy:
+        src: etc/masters
+        dest: /opt/flink/conf/masters
+    - name: Copy workers to instances
+      copy:
+        src: etc/workers
+        dest: /opt/flink/conf/workers
+    - name: Add work nodes to workers
+      lineinfile:
+        path: /opt/flink/conf/workers
+        line: "{{ item }}"
+        create: no
+      with_items: "{{ groups['hadoop'] | select('match', '^vm[0-9]+$') | map('extract', hostvars, 'inventory_hostname') | list }}"
