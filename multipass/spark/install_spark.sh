@@ -21,7 +21,7 @@ function download_spark() {
 
 function mount_spark() {
     for host in $(ansible-inventory -i inventory --list | jq -r '.hadoop.hosts[]'); do
-        echo "Mount ./spark/archive/spark-${SPARK_VERSION}-bin-hadoop3..."
+        echo "Mount ./spark/archive/spark-${SPARK_VERSION}-bin-hadoop3 on $host:/home/ubuntu/spark"
         multipass mount "./spark/archive/spark-${SPARK_VERSION}-bin-hadoop3" "$host":/home/ubuntu/spark
     done
 }
