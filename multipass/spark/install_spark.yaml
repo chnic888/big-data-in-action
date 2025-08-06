@@ -44,6 +44,7 @@
         - 'export JAVA_HOME={{ java_home_path }}'
         - 'export SPARK_MASTER_HOST=vm01'
         - 'export SPARK_MASTER_PORT=7077'
+        - 'export SPARK_WORKER_WEBUI_PORT=8082'
     - name: Add work nodes to workers
       lineinfile:
         path: /opt/spark/conf/workers
