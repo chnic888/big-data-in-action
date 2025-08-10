@@ -37,3 +37,8 @@
         line: "{{ item }}"
         create: no
       with_items: "{{ groups['hadoop'] | select('match', '^vm[0-9]+$') | map('extract', hostvars, 'inventory_hostname') | list }}"
+    - name: Set taskmanager.host to the inventory hostname
+      lineinfile:
+        path: /opt/flink/conf/config.yaml
+        regexp: '^  host: localhost'
+        line: '  host: {{ inventory_hostname }}'

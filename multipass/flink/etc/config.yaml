@@ -67,7 +67,7 @@ taskmanager:
   #
   # To enable this, set the bind-host address to one that has access to an outside facing network
   # interface, such as 0.0.0.0.
-  bind-host: localhost
+  bind-host: 0.0.0.0
   # The address of the host on which the TaskManager runs and can be reached by the JobManager and
   # other TaskManagers. If not specified, the TaskManager will try different strategies to identify
   # the address.
@@ -91,7 +91,7 @@ taskmanager:
 
 parallelism:
   # The parallelism used for programs that did not specify and other parallelism.
-  default: 2
+  default: 3
 
 # # The default file system scheme and authority.
 # # By default file paths without scheme are interpreted relative to the local
