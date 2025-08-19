@@ -11,6 +11,22 @@
       shell: rsync -a --chown=ubuntu:ubuntu /home/ubuntu/flink/ /opt/flink/
       become: true
       when: not flink_dir.stat.exists
+    - name: Copy fileflink-shaded-hadoop jar to /opt/flink/lib
+      ansible.builtin.copy:
+        src: /home/ubuntu/flink-shaded-hadoop-2-uber-2.8.3-10.0.jar
+        dest: /opt/flink/lib/flink-shaded-hadoop-2-uber-2.8.3-10.0.jar
+        remote_src: yes
+        owner: ubuntu 
+        group: ubuntu
+        mode: '0644'
+    - name: Copy commons-cli-1.5.0 jar to /opt/flink/lib
+      ansible.builtin.copy:
+        src: /home/ubuntu/commons-cli-1.5.0.jar
+        dest: /opt/flink/lib/commons-cli-1.5.0.jar
+        remote_src: yes
+        owner: ubuntu 
+        group: ubuntu
+        mode: '0644'        
     - name: Append environment variables to .bashrc
       lineinfile:
         path: /home/ubuntu/.bashrc
