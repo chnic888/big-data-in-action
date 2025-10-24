@@ -19,6 +19,14 @@
         owner: ubuntu
         group: ubuntu
         mode: "0644"
+    - name: Copy flink-shaded-guava jar to /opt/flink/lib
+      ansible.builtin.copy:
+        src: /home/ubuntu/flink-shaded-guava-33.4.0-jre-20.0.jar
+        dest: /opt/flink/lib/flink-shaded-guava-33.4.0-jre-20.0.jar
+        remote_src: yes
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
     - name: Copy commons-cli-1.5.0 jar to /opt/flink/lib
       ansible.builtin.copy:
         src: /home/ubuntu/commons-cli-1.5.0.jar
@@ -29,8 +37,8 @@
         mode: "0644"
     - name: Copy flink-connector-kafka jar to /opt/flink/lib
       ansible.builtin.copy:
-        src: /home/ubuntu/flink-connector-kafka-1.17.2.jar
-        dest: /opt/flink/lib/flink-connector-kafka-1.17.2.jar
+        src: /home/ubuntu/flink-connector-kafka-3.4.0-1.20.jar
+        dest: /opt/flink/lib/flink-connector-kafka-3.4.0-1.20.jar
         remote_src: yes
         owner: ubuntu
         group: ubuntu

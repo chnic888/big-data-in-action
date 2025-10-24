@@ -3,8 +3,9 @@
 FLINK_VERSION="1.20.2"
 
 flink_shaded_hadoop_file_name="flink-shaded-hadoop-2-uber-2.8.3-10.0.jar"
+flink_shaded_guava_file_name="flink-shaded-guava-33.4.0-jre-20.0.jar"
 commons_cli_file_name="commons-cli-1.5.0.jar"
-flink_connector_kafka_jar_name="flink-connector-kafka-1.17.2.jar"
+flink_connector_kafka_jar_name="flink-connector-kafka-3.4.0-1.20.jar"
 kafka_clients_jar_name="kafka-clients-3.9.1.jar"
 
 function download_flink() {
@@ -32,6 +33,13 @@ function download_flink_shaded_hadoop() {
         echo "File ${flink_shaded_hadoop_file_name} exist..."
     fi
 
+    if [ ! -e "./flink/archive/${flink_shaded_guava_file_name}" ]; then
+        echo "${flink_shaded_guava_file_name} not found, start to download file..."
+        wget -P "./flink/archive" "https://repo1.maven.org/maven2/org/apache/flink/flink-shaded-guava/33.4.0-jre-20.0/${flink_shaded_guava_file_name}"
+    else
+        echo "File ${flink_shaded_guava_file_name} exist..."
+    fi
+
     if [ ! -e "./flink/archive/${commons_cli_file_name}" ]; then
         echo "${commons_cli_file_name} not found, start to download file..."
         wget -P "./flink/archive" "https://repo1.maven.org/maven2/commons-cli/commons-cli/1.5.0/${commons_cli_file_name}"
@@ -43,7 +51,7 @@ function download_flink_shaded_hadoop() {
 function download_flink_connector() {
     if [ ! -e "./flink/archive/${flink_connector_kafka_jar_name}" ]; then
         echo "${flink_connector_kafka_jar_name} not found, start to download file..."
-        wget -P "./flink/archive" "https://repo1.maven.org/maven2/org/apache/flink/flink-connector-kafka/1.17.2/${flink_connector_kafka_jar_name}"
+        wget -P "./flink/archive" "https://repo1.maven.org/maven2/org/apache/flink/flink-connector-kafka/3.4.0-1.20/${flink_connector_kafka_jar_name}"
     else
         echo "File ${flink_connector_kafka_jar_name} exist..."
     fi
@@ -67,6 +75,9 @@ function transfer_dependent_jars() {
     for host in $(ansible-inventory -i inventory --list | jq -r '.hadoop.hosts[]'); do
         echo "Transfer ./flink/archive/${flink_shaded_hadoop_file_name} on $host:/home/ubuntu/"
         multipass transfer "./flink/archive/${flink_shaded_hadoop_file_name}" "$host":/home/ubuntu/
+
+        echo "Transfer ./flink/archive/${flink_shaded_guava_file_name} on $host:/home/ubuntu/"
+        multipass transfer "./flink/archive/${flink_shaded_guava_file_name}" "$host":/home/ubuntu/
 
         echo "Transfer ./flink/archive/${commons_cli_file_name} on $host:/home/ubuntu/"
         multipass transfer "./flink/archive/${commons_cli_file_name}" "$host":/home/ubuntu/
