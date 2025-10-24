@@ -16,25 +16,41 @@
         src: /home/ubuntu/flink-shaded-hadoop-2-uber-2.8.3-10.0.jar
         dest: /opt/flink/lib/flink-shaded-hadoop-2-uber-2.8.3-10.0.jar
         remote_src: yes
-        owner: ubuntu 
+        owner: ubuntu
         group: ubuntu
-        mode: '0644'
+        mode: "0644"
     - name: Copy commons-cli-1.5.0 jar to /opt/flink/lib
       ansible.builtin.copy:
         src: /home/ubuntu/commons-cli-1.5.0.jar
         dest: /opt/flink/lib/commons-cli-1.5.0.jar
         remote_src: yes
-        owner: ubuntu 
+        owner: ubuntu
         group: ubuntu
-        mode: '0644'        
+        mode: "0644"
+    - name: Copy flink-connector-kafka jar to /opt/flink/lib
+      ansible.builtin.copy:
+        src: /home/ubuntu/flink-connector-kafka-1.17.2.jar
+        dest: /opt/flink/lib/flink-connector-kafka-1.17.2.jar
+        remote_src: yes
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+    - name: Copy kafka-clients jar to /opt/flink/lib
+      ansible.builtin.copy:
+        src: /home/ubuntu/kafka-clients-3.9.1.jar
+        dest: /opt/flink/lib/kafka-clients-3.9.1.jar
+        remote_src: yes
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
     - name: Append environment variables to .bashrc
       lineinfile:
         path: /home/ubuntu/.bashrc
         line: "{{ item }}"
         state: present
       loop:
-        - 'export FLINK_HOME=/opt/flink'
-        - 'export PATH=$PATH:$FLINK_HOME/bin'
+        - "export FLINK_HOME=/opt/flink"
+        - "export PATH=$PATH:$FLINK_HOME/bin"
     - name: Copy config.yaml to instances
       copy:
         src: etc/config.yaml
@@ -56,5 +72,5 @@
     - name: Set taskmanager.host to the inventory hostname
       lineinfile:
         path: /opt/flink/conf/config.yaml
-        regexp: '^  host: localhost'
-        line: '  host: {{ inventory_hostname }}'
+        regexp: "^  host: localhost"
+        line: "  host: {{ inventory_hostname }}"
