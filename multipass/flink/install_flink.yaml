@@ -21,8 +21,8 @@
         mode: "0644"
     - name: Copy flink-shaded-guava jar to /opt/flink/lib
       ansible.builtin.copy:
-        src: /home/ubuntu/flink-shaded-guava-33.4.0-jre-20.0.jar
-        dest: /opt/flink/lib/flink-shaded-guava-33.4.0-jre-20.0.jar
+        src: /home/ubuntu/flink-shaded-guava-31.1-jre-17.0.jar
+        dest: /opt/flink/lib/flink-shaded-guava-31.1-jre-17.0.jar
         remote_src: yes
         owner: ubuntu
         group: ubuntu
