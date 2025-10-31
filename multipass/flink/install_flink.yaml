@@ -35,6 +35,14 @@
         owner: ubuntu
         group: ubuntu
         mode: "0644"
+    - name: Copy flink-connector-base jar to /opt/flink/lib
+      ansible.builtin.copy:
+        src: /home/ubuntu/flink-connector-base-1.20.2.jar
+        dest: /opt/flink/lib/flink-connector-base-1.20.2.jar
+        remote_src: yes
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
     - name: Copy flink-connector-kafka jar to /opt/flink/lib
       ansible.builtin.copy:
         src: /home/ubuntu/flink-connector-kafka-3.4.0-1.20.jar
